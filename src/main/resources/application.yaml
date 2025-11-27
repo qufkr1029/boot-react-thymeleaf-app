@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: demo
+  mvc:
+    pathmatch:
+      matching-strategy: ant-path-matcher
