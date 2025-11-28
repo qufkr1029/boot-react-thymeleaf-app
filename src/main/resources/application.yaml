@@ -4,3 +4,8 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant-path-matcher
+
+logging:
+  level:
+    root: INFO
+    ai.junbeom.demo: TRACE
