@@ -20,7 +20,7 @@ public class LoggingAspect {
     /**
      * Pointcut to execute on all methods in classes in the controller package.
      */
-    @Pointcut("execution(* ai.junbeom.demo.controller..*.*(..))")
+    @Pointcut("execution(* ai.junbeom.demo.controller..*.*(..)) || execution(* ai.junbeom.demo.account.web..*.*(..))")
     public void controllerLayer() {
     }
 

@@ -1,14 +1,16 @@
-package ai.junbeom.demo.controller.account;
-
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import lombok.extern.slf4j.Slf4j;
-
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.ui.Model;
+package ai.junbeom.demo.account.controller;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @Slf4j
@@ -36,5 +38,17 @@ public class AccountController {
         model.addAttribute("requestTime", formattedNow);
 
         return "account/login";
+    }
+
+    @GetMapping("/login2")
+    public String customLogin() {
+        return "account/login2";
+    }
+
+    @PostMapping("/login2")
+    public String processCustomLogin(@RequestParam String username, @RequestParam String password) {
+        // TODO: 수동 로그인 처리 로직 구현
+        log.info("Attempting custom login for user: {}", username);
+        return "redirect:/";
     }
 }

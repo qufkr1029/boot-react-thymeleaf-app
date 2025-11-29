@@ -1,13 +1,33 @@
 spring:
-  thymeleaf:
-    cache: false
   application:
     name: demo
+  thymeleaf:
+    cache: false
   mvc:
     pathmatch:
       matching-strategy: ant-path-matcher
+  # H2 데이터베이스 설정
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  # H2 콘솔 활성화
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  # JPA 설정
+  jpa:
+    hibernate:
+      ddl-auto: update # 애플리케이션 실행 시 스키마 자동 업데이트
+    properties:
+      hibernate:
+        format_sql: true # SQL 로그 포맷팅
+    show-sql: true # SQL 로그 출력
 
 logging:
   level:
     root: INFO
     ai.junbeom.demo: TRACE
+    org.hibernate.type: TRACE # SQL 바인딩 파라미터 로그 추가
