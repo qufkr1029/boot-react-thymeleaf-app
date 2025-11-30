@@ -44,7 +44,7 @@ public class UserController {
     }
 
     @GetMapping({"/"})
-    public String indexPage(HttpServletRequest request, Model model) {
+    public String indexPage(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         User user = userRepository.findByUserId(authentication.getName())
