@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen py-12">
+    <div class="w-full max-w-lg bg-white rounded-lg shadow-md p-8">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">회원가입</h1>
+        <hr class="my-6 border-gray-300">
+
+        <form id="signup-form" th:action="@{/signup}" method="post" class="space-y-4">
+            <!-- User ID -->
+            <div>
+                <label for="userId" class="block text-gray-700 text-sm font-bold mb-2">아이디</label>
+                <div class="flex">
+                    <input type="text" id="userId" name="userId" placeholder="4~20자의 영문, 숫자만 가능합니다." class="shadow appearance-none border rounded-l flex-1 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" maxlength="20" required>
+                    <button type="button" id="check-id-btn" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-r focus:outline-none focus:shadow-outline text-sm whitespace-nowrap">중복확인</button>
+                </div>
+                <p id="id-feedback" class="text-sm mt-1"></p>
+            </div>
+
+            <!-- Password -->
+            <div>
+                <label for="password" class="block text-gray-700 text-sm font-bold mb-2">비밀번호</label>
+                <input type="password" id="password" name="password" placeholder="4~30자의 영문, 숫자, 특수문자" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" maxlength="30" required>
+            </div>
+
+            <!-- Email -->
+            <div>
+                <label for="email" class="block text-gray-700 text-sm font-bold mb-2">이메일</label>
+                <div class="flex">
+                    <input type="email" id="email" name="email" placeholder="example@example.com" class="shadow appearance-none border rounded-l flex-1 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                    <button type="button" id="check-email-btn" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-r focus:outline-none focus:shadow-outline text-sm whitespace-nowrap">중복확인</button>
+                </div>
+                <p id="email-feedback" class="text-sm mt-1"></p>
+            </div>
+
+            <!-- Global Error Message -->
+            <div th:if="${error}" class="text-red-500 text-sm mb-4 text-center" th:text="${error}">
+                회원가입 중 오류가 발생했습니다.
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline transition duration-300 mt-6">회원가입</button>
+        </form>
+
+        <div class="text-center mt-6">
+            <a th:href="@{/login}" class="text-blue-500 hover:text-blue-700 text-sm">이미 계정이 있으신가요? 로그인</a>
+        </div>
+    </div>
+
+<script>
+    const userIdInput = document.getElementById('userId');
+    const idFeedback = document.getElementById('id-feedback');
+    const checkIdBtn = document.getElementById('check-id-btn');
+    let isIdChecked = false;
+    let isIdAvailable = false;
+
+    const emailInput = document.getElementById('email');
+    const emailFeedback = document.getElementById('email-feedback');
+    const checkEmailBtn = document.getElementById('check-email-btn');
+    let isEmailChecked = false;
+    let isEmailAvailable = false;
+
+    userIdInput.addEventListener('input', () => {
+        isIdChecked = false;
+        isIdAvailable = false;
+        idFeedback.textContent = '';
+    });
+
+    emailInput.addEventListener('input', () => {
+        isEmailChecked = false;
+        isEmailAvailable = false;
+        emailFeedback.textContent = '';
+    });
+
+    checkIdBtn.addEventListener('click', async () => {
+        const userId = userIdInput.value;
+        if (userId.length < 4 || userId.length > 20) {
+            idFeedback.textContent = '아이디는 4자 이상 20자 이하로 입력해주세요.';
+            idFeedback.className = 'text-red-500 text-sm mt-1';
+            return;
+        }
+        if (!/^[a-zA-Z0-9]*$/.test(userId)) {
+            idFeedback.textContent = '아이디는 영문과 숫자만 포함할 수 있습니다.';
+            idFeedback.className = 'text-red-500 text-sm mt-1';
+            return;
+        }
+
+        try {
+            const response = await fetch(`/signup/check-id/${userId}`);
+            const isTaken = await response.json();
+            
+            if (isTaken) {
+                idFeedback.textContent = '이미 사용 중인 아이디입니다.';
+                idFeedback.className = 'text-red-500 text-sm mt-1';
+                isIdAvailable = false;
+            } else {
+                idFeedback.textContent = '사용 가능한 아이디입니다.';
+                idFeedback.className = 'text-green-500 text-sm mt-1';
+                isIdAvailable = true;
+            }
+            isIdChecked = true;
+        } catch (error) {
+            idFeedback.textContent = '오류가 발생했습니다. 다시 시도해주세요.';
+            idFeedback.className = 'text-red-500 text-sm mt-1';
+            isIdAvailable = false;
+        }
+    });
+
+    checkEmailBtn.addEventListener('click', async () => {
+        const email = emailInput.value;
+        // Basic email regex
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            emailFeedback.textContent = '올바른 이메일 형식이 아닙니다.';
+            emailFeedback.className = 'text-red-500 text-sm mt-1';
+            return;
+        }
+
+        try {
+            const response = await fetch(`/signup/check-email/${email}`);
+            const isTaken = await response.json();
+
+            if (isTaken) {
+                emailFeedback.textContent = '이미 사용 중인 이메일입니다.';
+                emailFeedback.className = 'text-red-500 text-sm mt-1';
+                isEmailAvailable = false;
+            } else {
+                emailFeedback.textContent = '사용 가능한 이메일입니다.';
+                emailFeedback.className = 'text-green-500 text-sm mt-1';
+                isEmailAvailable = true;
+            }
+            isEmailChecked = true;
+        } catch (error) {
+            emailFeedback.textContent = '오류가 발생했습니다. 다시 시도해주세요.';
+            emailFeedback.className = 'text-red-500 text-sm mt-1';
+            isEmailAvailable = false;
+        }
+    });
+
+    document.getElementById('signup-form').addEventListener('submit', (e) => {
+        if (!isIdChecked || !isIdAvailable) {
+            e.preventDefault();
+            alert('아이디 중복 확인을 해주세요.');
+            return;
+        }
+        if (!isEmailChecked || !isEmailAvailable) {
+            e.preventDefault();
+            alert('이메일 중복 확인을 해주세요.');
+            return;
+        }
+    });
+</script>
+</body>
+</html>

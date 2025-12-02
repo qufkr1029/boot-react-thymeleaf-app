@@ -7,7 +7,7 @@ CREATE TABLE user (
     create_id VARCHAR(50) NOT NULL,
     update_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     update_id VARCHAR(50) NOT NULL,
-    note TEXT NOT NULL,
+    note TEXT,
     PRIMARY KEY (id),
     UNIQUE KEY uq_user_id (user_id),
     UNIQUE KEY uq_email (email)

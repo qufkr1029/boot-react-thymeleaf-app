@@ -1,4 +1,4 @@
-package ai.junbeom.demo.dto;
+package ai.junbeom.demo.account.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
