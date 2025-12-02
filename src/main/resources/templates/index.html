@@ -1,17 +1,46 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>환영하는 페이지</title>
+    <title>My Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <h1>안녕하세요 소개페이지입니다.</h1>
-    <p>사용자 아이디: <span th:text="${userId}">userId</span></p>
-    <p>사용자 이메일: <span th:text="${email}">email</span></p>
-    <p>사용자 역할: <span th:text="${role}">role</span></p>
-    <form th:action="@{/logout}" method="get">
-        <button type="submit">로그아웃</button>
-    </form>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+    <div class="w-full max-w-md bg-white rounded-lg shadow-md p-8">
+        <div class="text-center mb-6">
+            <h1 class="text-3xl font-bold text-gray-800">My Page</h1>
+            <p class="text-gray-500 mt-2">Welcome back! Here is your information.</p>
+        </div>
+
+        <div class="space-y-4">
+            <div class="flex justify-between items-center border-b pb-2">
+                <span class="font-semibold text-gray-600">User ID</span>
+                <span class="text-gray-800" th:text="${userId}">userId</span>
+            </div>
+            <div class="flex justify-between items-center border-b pb-2">
+                <span class="font-semibold text-gray-600">Email</span>
+                <span class="text-gray-800" th:text="${email}">email</span>
+            </div>
+            <div class="flex justify-between items-center">
+                <span class="font-semibold text-gray-600">Role</span>
+                <span class="text-gray-800" th:text="${role}">role</span>
+            </div>
+        </div>
+
+        <div th:if="${role == 'ADMIN'}" class="mt-8 text-center">
+            <a href="/admin" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline transition duration-300 block">
+                관리자 페이지로 이동
+            </a>
+        </div>
+
+        <div class="mt-4 text-center">
+            <form th:action="@{/logout}" method="get">
+                <button type="submit" class="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline transition duration-300">
+                    Logout
+                </button>
+            </form>
+        </div>
+    </div>
 </body>
 </html>

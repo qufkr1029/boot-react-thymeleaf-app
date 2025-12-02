@@ -4,33 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>로그인</title>
-    <link rel="stylesheet" th:href="@{/css/account/login.css}">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <div class="login-container">
-        <h1>로그인</h1>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+    <div class="w-full max-w-md bg-white rounded-lg shadow-md p-8">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">로그인</h1>
 
-        <div class="info-box">
+        <div class="space-y-2 text-sm text-gray-600 mb-4">
             <p><strong>당신의 접속 IP:</strong> <span th:text="${clientIp}">0.0.0.0</span></p>
             <p><strong>로그인 페이지 접속 시간:</strong> <span th:text="${requestTime}">YYYY-MM-DD HH:mm:ss</span></p>
         </div>
-        <hr>
 
-        <!-- 로그인 실패 시 에러 메시지 표시 -->
-        <div th:if="${param.error}" style="color: red; margin-bottom: 15px;">
+        <div th:if="${advice}" class="my-6 p-4 bg-gray-50 rounded-lg">
+            <p class="text-gray-700 italic">" <span th:text="${advice.message}">명언 내용</span> "</p>
+            <p class="text-right text-gray-600 font-semibold mt-2">- <span th:text="${advice.author}">저자</span> -</p>
+        </div>
+        
+        <hr class="my-6 border-gray-300">
+
+        <div th:if="${param.error}" class="text-red-500 text-sm mb-4 text-center">
             사용자 이름 또는 비밀번호가 올바르지 않습니다.
         </div>
 
-        <form th:action="@{/login}" method="post">
+        <form th:action="@{/login}" method="post" class="space-y-4">
             <div>
-                <label for="user_id">아이디</label>
-                <input type="text" id="user_id" name="user_id" placeholder="사용자 이름을 입력하세요">
+                <label for="user_id" class="block text-gray-700 text-sm font-bold mb-2">아이디</label>
+                <input type="text" id="user_id" name="user_id" placeholder="사용자 이름을 입력하세요" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
             </div>
             <div>
-                <label for="password">비밀번호</label>
-                <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요">
+                <label for="password" class="block text-gray-700 text-sm font-bold mb-2">비밀번호</label>
+                <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
             </div>
-            <button type="submit">로그인</button><br>
+            <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline transition duration-300 mt-6">로그인</button>
         </form>
     </div>
 </body>

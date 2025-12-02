@@ -9,9 +9,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.client.RestTemplate;
 
 import ai.junbeom.demo.account.domain.User;
 import ai.junbeom.demo.account.repository.UserRepository;
+import ai.junbeom.demo.dto.Advice;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,12 +25,22 @@ import lombok.extern.slf4j.Slf4j;
 public class UserController {
 
     private final UserRepository userRepository;
+    private final RestTemplate restTemplate;
 
     @GetMapping({"/login"})
     public String loginPage(HttpServletRequest request, Model model, Authentication authentication) {
 
         if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
             return "redirect:/";
+        }
+        
+        try {
+            final String ADVICE_API_URL = "https://korean-advice-open-api.vercel.app/api/advice";
+            Advice advice = restTemplate.getForObject(ADVICE_API_URL, Advice.class);
+            model.addAttribute("advice", advice);
+        } catch (Exception e) {
+            log.error("Failed to fetch advice from external API", e);
+            model.addAttribute("advice", new Advice("가끔은 API도 쉬고 싶을 때가 있죠.", "개발자"));
         }
 
         String clientIp = request.getRemoteAddr();
