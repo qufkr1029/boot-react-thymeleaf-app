@@ -25,6 +25,58 @@
             padding: 40px 20px;
         }
 
+        /* 목차 스타일 */
+        .toc {
+            position: fixed;
+            left: 50px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            max-width: 200px;
+        }
+
+        .toc h3 {
+            font-size: 1em;
+            color: #2d3748;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-item {
+            margin-bottom: 10px;
+        }
+
+        .toc-link {
+            text-decoration: none;
+            color: #555;
+            font-size: 0.9em;
+            display: block;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .toc-link:hover {
+            background: #f7fafc;
+            color: #667eea;
+            transform: translateX(5px);
+        }
+
+        .toc-link.active {
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+
         header {
             background: white;
             border-radius: 20px;
@@ -229,6 +281,12 @@
             padding: 20px;
         }
 
+        @media (max-width: 1300px) {
+            .toc {
+                display: none;
+            }
+        }
+
         @media (max-width: 768px) {
             h1 {
                 font-size: 2em;
@@ -248,6 +306,17 @@
 </head>
 
 <body>
+    <!-- 목차 -->
+    <nav class="toc">
+        <h3>목차</h3>
+        <ul class="toc-list">
+            <li class="toc-item"><a href="#intro" class="toc-link">자기소개</a></li>
+            <li class="toc-item"><a href="#skills" class="toc-link">기술 스택</a></li>
+            <li class="toc-item"><a href="#experience" class="toc-link">경력</a></li>
+            <li class="toc-item"><a href="#education" class="toc-link">학력 및 자격증</a></li>
+        </ul>
+    </nav>
+
     <div class="container">
         <header>
             <div class="profile-img">준범</div>
@@ -275,7 +344,7 @@
             </div>
         </header>
 
-        <section>
+        <section id="intro">
             <h2>👋 자기소개</h2>
             <p class="intro-text">
                 안녕하세요 3년차 풀스택 개발자 박준범입니다.
@@ -284,7 +353,7 @@
             </p>
         </section>
 
-        <section>
+        <section id="skills">
             <h2>💻 기술 스택</h2>
             <div class="skills-grid">
                 <div class="skill-category">
@@ -360,7 +429,6 @@
                         <span class="skill-level">⭐</span>
                     </div>
                 </div>
-
             </div>
         </section>
 
@@ -396,7 +464,7 @@
             </div>
         </section> -->
 
-        <section>
+        <section id="experience">
             <h2>💼 경력</h2>
             <div class="experience-item">
                 <h3>이너인포</h3>
@@ -470,7 +538,7 @@
             </div>
         </section>
 
-        <section>
+        <section id="education">
             <h2>🎓 학력 및 자격증</h2>
             <div class="experience-item">
                 <h3>공주대학교</h3>
@@ -486,6 +554,45 @@
             <p>© 2025 박준범. All rights reserved.</p>
         </footer>
     </div>
+
+    <script>
+        // 스크롤 시 목차 활성화
+        const sections = document.querySelectorAll('section[id]');
+        const tocLinks = document.querySelectorAll('.toc-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            tocLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // 부드러운 스크롤
+        tocLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                
+                window.scrollTo({
+                    top: targetSection.offsetTop - 100,
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>
