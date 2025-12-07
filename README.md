@@ -89,3 +89,8 @@ java -jar build/libs/demo-0.0.1-SNAPSHOT.jar
 
 ### 4. 개발 환경 실행
 - `./gradlew bootRun` 명령 하나로 프런트엔드 빌드와 백엔드 서버 실행이 모두 이루어지도록 설정하여 개발 편의성을 높였습니다.
+
+
+
+# CI/CD 구성
+- 젠킨스, 도커
