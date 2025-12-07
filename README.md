@@ -93,4 +93,4 @@ java -jar build/libs/demo-0.0.1-SNAPSHOT.jar
 
 
 # CI/CD 구성
-- 젠킨스, 도커, ngrok
+- 젠킨스, 도커, ngrok, 깃허브
